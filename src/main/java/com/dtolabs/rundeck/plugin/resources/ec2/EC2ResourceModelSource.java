@@ -251,11 +251,13 @@ public class EC2ResourceModelSource implements ResourceModelSource {
         AWSSecurityTokenServiceClient sts_client;
 
         if (provider != null) {
-            sts_client = new AWSSecurityTokenServiceClient(provider, clientConfiguration);
+            sts_client = new AWSSecurityTokenServiceClientBuilder.withClientConfiguration(clientConfiguration).withCredentials(provider).build();
         } else {
-            sts_client = new AWSSecurityTokenServiceClient(clientConfiguration);
+            sts_client = new AWSSecurityTokenServiceClientBuilder.withClientConfiguration(clientConfiguration).build();
         }
-        sts_client.setEndpoint("sts.ap-northeast-1.amazonaws.com");
+        //        sts_client.setEndpoint("sts-endpoint.amazonaws.com");
+        logger.info("*** KANGAECHU environment variable  AWS_STS_REGIONAL_ENDPOINTS: " + System.getenv("AWS_STS_REGIONAL_ENDPOINTS"));
+        logger.info("*** KANGAECHU environment variables : " + System.getenv());
         AssumeRoleRequest assumeRoleRequest = new AssumeRoleRequest();
         assumeRoleRequest.setRoleArn(assumeRoleArn);
         if(externalId!=null){
